@@ -70,7 +70,7 @@ public class EbankingBackendApplication {
                             BankAccountRepository bankAccountRepository,
                             AccountOperationRepository accountOperationRepository){
         return args -> {
-            Stream.of("Saad","Sirage","Amine").forEach(name->{
+            Stream.of("Saad","Sirage","Hamid").forEach(name->{
                 Customer customer=new Customer();
                 customer.setName(name);
                 customer.setEmail(name+"@gmail.com");
