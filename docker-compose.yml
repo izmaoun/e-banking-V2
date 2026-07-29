@@ -1,14 +1,40 @@
-
 services:
-  # Service MySQL
+  # ============================================
+  # 1. NGINX LOAD BALANCER
+  # ============================================
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-lb
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app1
+      - app2
+      - app3
+      - app4
+      - app5
+      - app6
+      - app7
+      - app8
+      - app9
+      - app10
+    networks:
+      - app-network
+    restart: on-failure
+
+  # ============================================
+  # 2. MYSQL
+  # ============================================
   mysql:
     image: mysql:8.0
     container_name: e_bank_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-fifa2014}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-e_bank}
+      MYSQL_USER: ${MYSQL_USER:-amine}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-fifa2014}
     ports:
       - "3307:3306"  # 🔥 Port 3307 sur l'hôte vers 3306 dans le conteneur
     volumes:
@@ -19,18 +45,22 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
+    restart: on-failure
 
-  # Service Backend (Spring Boot)
-  backend:
+  # ============================================
+  # 3. 10 INSTANCES DU BACKEND (ports uniques)
+  # ============================================
+  app1:
     build: ./backend
-    container_name: e_bank_backend
+    container_name: e_bank_app1
     ports:
-      - "8085:8085"
+      - "8081:8085"
     environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
     depends_on:
       mysql:
         condition: service_healthy
@@ -38,29 +68,194 @@ services:
       - app-network
     restart: on-failure
 
-  # Service Frontend (Angular)
+  app2:
+    build: ./backend
+    container_name: e_bank_app2
+    ports:
+      - "8082:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  app3:
+    build: ./backend
+    container_name: e_bank_app3
+    ports:
+      - "8083:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  app4:
+    build: ./backend
+    container_name: e_bank_app4
+    ports:
+      - "8084:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  app5:
+    build: ./backend
+    container_name: e_bank_app5
+    ports:
+      - "8085:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  app6:
+    build: ./backend
+    container_name: e_bank_app6
+    ports:
+      - "8086:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  app7:
+    build: ./backend
+    container_name: e_bank_app7
+    ports:
+      - "8087:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  app8:
+    build: ./backend
+    container_name: e_bank_app8
+    ports:
+      - "8088:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  app9:
+    build: ./backend
+    container_name: e_bank_app9
+    ports:
+      - "8089:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  app10:
+    build: ./backend
+    container_name: e_bank_app10
+    ports:
+      - "8090:8085"
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/e_bank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-fifa2014}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+  # ============================================
+  # 4. FRONTEND
+  # ============================================
   frontend:
     build: ./frontend
     container_name: e_bank_frontend
     ports:
       - "4200:4200"
-#    volumes:
-#      - ./frontend:/app
-#      - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - ANGULAR_API_URL=${ANGULAR_API_URL}
+      - ANGULAR_API_URL=${ANGULAR_API_URL:-http://localhost:80}
     depends_on:
-      - backend
+      - nginx
     networks:
       - app-network
     restart: on-failure
 
-# Volumes persistants
+# ============================================
+# VOLUMES
+# ============================================
 volumes:
   mysql_data:
 
-# Réseau
+# ============================================
+# RÉSEAU
+# ============================================
 networks:
   app-network:
     driver: bridge

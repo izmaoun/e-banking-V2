@@ -116,11 +116,13 @@ jobs:
           docker ps | grep test-backend
 
   deploy:
-      runs-on: ubuntu-latest
-      needs: docker-build
-
-      steps:
-        - name: Trigger deployment webhook
-          run: |
-            curl -X POST \
-              https://decorated-vessel-mashed.ngrok-free.dev/hooks/deploy-ci
+    runs-on: ubuntu-latest
+    needs: docker-build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Trigger deployment webhook
+        run: |
+          curl -X POST \
+            https://decorated-vessel-mashed.ngrok-free.dev/hooks/deploy-app \
+            -H "Content-Type: application/json" \
+            -d '{"ref": "main"}'
