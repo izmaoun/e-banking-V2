@@ -9,17 +9,6 @@ services:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - app1
-      - app2
-      - app3
-      - app4
-      - app5
-      - app6
-      - app7
-      - app8
-      - app9
-      - app10
     networks:
       - app-network
     restart: on-failure
@@ -53,6 +42,7 @@ services:
   app1:
     build: ./backend
     container_name: e_bank_app1
+    image: digital-banking-backend:latest
     ports:
       - "8081:8085"
     environment:
@@ -71,6 +61,7 @@ services:
   app2:
     build: ./backend
     container_name: e_bank_app2
+    image: digital-banking-backend:latest
     ports:
       - "8082:8085"
     environment:
@@ -89,6 +80,7 @@ services:
   app3:
     build: ./backend
     container_name: e_bank_app3
+    image: digital-banking-backend:latest
     ports:
       - "8083:8085"
     environment:
@@ -107,6 +99,7 @@ services:
   app4:
     build: ./backend
     container_name: e_bank_app4
+    image: digital-banking-backend:latest
     ports:
       - "8084:8085"
     environment:
@@ -125,6 +118,7 @@ services:
   app5:
     build: ./backend
     container_name: e_bank_app5
+    image: digital-banking-backend:latest
     ports:
       - "8085:8085"
     environment:
@@ -143,6 +137,7 @@ services:
   app6:
     build: ./backend
     container_name: e_bank_app6
+    image: digital-banking-backend:latest
     ports:
       - "8086:8085"
     environment:
@@ -161,6 +156,7 @@ services:
   app7:
     build: ./backend
     container_name: e_bank_app7
+    image: digital-banking-backend:latest
     ports:
       - "8087:8085"
     environment:
@@ -179,6 +175,7 @@ services:
   app8:
     build: ./backend
     container_name: e_bank_app8
+    image: digital-banking-backend:latest
     ports:
       - "8088:8085"
     environment:
@@ -197,6 +194,7 @@ services:
   app9:
     build: ./backend
     container_name: e_bank_app9
+    image: digital-banking-backend:latest
     ports:
       - "8089:8085"
     environment:
@@ -215,6 +213,7 @@ services:
   app10:
     build: ./backend
     container_name: e_bank_app10
+    image: digital-banking-backend:latest
     ports:
       - "8090:8085"
     environment:
@@ -241,8 +240,6 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - ANGULAR_API_URL=${ANGULAR_API_URL:-http://localhost:80}
-    depends_on:
-      - nginx
     networks:
       - app-network
     restart: on-failure
