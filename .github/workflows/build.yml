@@ -123,7 +123,8 @@ jobs:
     steps:
       - name: Trigger deployment webhook
         run: |
-          curl -X POST \
-            https://decorated-vessel-mashed.ngrok-free.dev/hooks/deploy-app \
+          curl -v \
+            -X POST \
             -H "Content-Type: application/json" \
-            -d '{"action":"push"}'
+            -d '{"action":"push"}' \
+            https://decorated-vessel-mashed.ngrok-free.dev/hooks/deploy-app
